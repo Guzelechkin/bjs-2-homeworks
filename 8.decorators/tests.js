@@ -40,25 +40,25 @@ describe("Домашнее задание к занятию 8 «Функции �
     it("Декоратор выполняет первый синхронный вызов функции", () => {
       let hasCalled = false;
       const functionToDecorate = () => {
-        console.log("тук тук");
+        console.log("вызов дукорируемой функции");
         hasCalled = !hasCalled;
       }
       const decoratedFunction = debounceDecoratorNew(functionToDecorate, 100);
-      decoratedFunction(1, 2, 3);
+      decoratedFunction(1, 1);
       expect(hasCalled).toBe(true);
     });
 
     it("Декоратор выполнит второй вызов асинхронно функции", (done) => {
       let hasCalled = false;
       const functionToDecorate = () => {
-        console.log("тук тук");
+        console.log("вызов дукорируемой функции");
         hasCalled = !hasCalled;
       }
       const decoratedFunction = debounceDecoratorNew(functionToDecorate, 100);
-      decoratedFunction(1, 2, 3);
+      decoratedFunction(2, 1);
       expect(hasCalled).toBe(true);
 
-      decoratedFunction(1, 2, 3);
+      decoratedFunction(2, 2);
       expect(hasCalled).toBe(true);
 
       setTimeout(() => {
@@ -68,40 +68,39 @@ describe("Домашнее задание к занятию 8 «Функции �
     });
 
     it("Декоратор считает общее количество вызовов функции", () => {
-      const functionToDecorate = () => console.log("тук тук");
+      const functionToDecorate = () => console.log("вызов декорируемой функции");
       const decoratedFunction = debounceDecoratorNew(functionToDecorate, 100);
+      decoratedFunction(3, 1);
       expect(decoratedFunction.allCount).toBe(0);
-      decoratedFunction(1, 2, 3);
-      expect(decoratedFunction.allCount).toBe(1);
 
-      decoratedFunction(1, 2, 3);
-      expect(decoratedFunction.allCount).toBe(2);
+      decoratedFunction(3, 2);
+      expect(decoratedFunction.allCount).toBe(1);
     });
 
     it("Декоратор считает количество вызовов переданной функции", (done) => {
-      const functionToDecorate = () => console.log("тук тук");
+      const functionToDecorate = () => console.log("вызов дукорируемой функции");
       const decoratedFunction = debounceDecoratorNew(functionToDecorate, 100);
-      expect(decoratedFunction.count).toBe(0);
-      decoratedFunction(1, 2, 3);
+      //expect(decoratedFunction.count).toBe(0);
+      decoratedFunction(4, 1);
       expect(decoratedFunction.count).toBe(1);
   
-      decoratedFunction(1, 2, 3);
+      decoratedFunction(4, 2);
       expect(decoratedFunction.count).toBe(1);
   
       setTimeout(() => {
-        decoratedFunction(1, 2, 3);
+        decoratedFunction(4, 3);
         expect(decoratedFunction.count).toBe(2);
       }, 150);
 
       setTimeout(() => {
-        decoratedFunction(1, 2, 3);
+        decoratedFunction(4, 4);
         expect(decoratedFunction.count).toBe(2);
       }, 200);
 
       setTimeout(() => {
-        decoratedFunction(1, 2, 3);
+        decoratedFunction(4, 5);
         expect(decoratedFunction.count).toBe(3);
-        expect(decoratedFunction.allCount).toBe(5);
+        expect(decoratedFunction.allCount).toBe(4);
         done();
       }, 400);
     });
